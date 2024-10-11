@@ -19,9 +19,11 @@ func NewDefault() *ShellCmd {
 // ...
 // import "github.com/malumar/tracer"
 // ...
-// cmd := tracer.New(tracer.NewSimple(tracer.All, NewSimple(Debug|Trace, func(bytes []byte) {
-//		sb.Write(bytes)
-// }))
+//
+//	cmd := tracer.New(tracer.NewSimple(tracer.All, NewSimple(Debug|Trace, func(bytes []byte) {
+//			sb.Write(bytes)
+//	}))
+//
 // ...
 func New(tracer io.Writer) *ShellCmd {
 	return &ShellCmd{tracer: tracer}
@@ -44,14 +46,8 @@ type ShellCmd struct {
 	stderrBuf bytes.Buffer
 }
 
-func (t *ShellCmd) SetEnv(args ...interface{}) *ShellCmd {
-	if args != nil && len(args) > 0 {
-		t.env = make([]string, 0)
-		for _, a := range args {
-			v := fmt.Sprintf("%v", a)
-			t.env = append(t.env, v)
-		}
-	}
+func (t *ShellCmd) SetEnv(env Environment) *ShellCmd {
+	t.env = EnvironmentToSliceOfStr(env)
 	return t
 }
 
